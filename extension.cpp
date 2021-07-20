@@ -65,6 +65,10 @@ bool EntityLumpExt::Hook_LevelInit(char const *pMapName, char const *pMapEntitie
 {
 	lumpmanager->Parse(pMapEntities);
 
+	// TODO void OnEntityLumpParsed()
+
+	g_strMapEntities = lumpmanager->Dump();
+
 	RETURN_META_VALUE(MRES_IGNORED, true);
 }
 

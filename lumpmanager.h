@@ -52,6 +52,11 @@ public:
 	 * @brief Parses the map entities string into an internal representation.
 	 */
 	void Parse(const char* pMapEntities);
+	
+	/**
+	 * @brief Dumps the current internal representation out to an std::string.
+	 */
+	std::string Dump();
 
 	/**
 	 * @brief Returns a weak reference to an EntityLumpEntry.  Used for handles on the scripting side.

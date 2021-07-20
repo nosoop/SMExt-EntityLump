@@ -51,6 +51,8 @@ void EntityLumpManager::Parse(const char* pMapEntities) {
 	
 	EntityLumpEntry currentEntry;
 	std::smatch match;
+	
+	// TODO we need a custom getline that handles any combination of CR / LF.
 	for (std::string line; std::getline(mapEntities, line);) {
 		if (line == "{") {
 			// TODO we should just be able to assert that this is empty, right?
@@ -64,4 +66,20 @@ void EntityLumpManager::Parse(const char* pMapEntities) {
 	auto stop = std::chrono::high_resolution_clock::now();
 	std::chrono::duration<float> duration = stop - start;
 	rootconsole->ConsolePrint("Parsing %d entities took %f seconds", m_Entities.size(), duration.count());
+}
+
+std::string EntityLumpManager::Dump() {
+	std::stringstream stream;
+	for (const auto& entry : m_Entities) {
+		// ignore empty entries
+		if ((*entry).empty()) {
+			continue;
+		}
+		stream << "{\n";
+		for (const auto& pair : (*entry)) {
+			stream << '"' << pair.first << "\"	\"" << pair.second << '"' << '\n';
+		}
+		stream << "}\n";
+	}
+	return stream.str();
 }
