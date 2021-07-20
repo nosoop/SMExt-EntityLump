@@ -32,6 +32,7 @@
 #include "extension.h"
 #include "lumpmanager.h"
 
+#include <chrono>
 #include <regex>
 #include <sstream>
 #include <string>
@@ -45,6 +46,7 @@ void EntityLumpManager::Parse(const char* pMapEntities) {
 	
 	m_Entities.clear();
 	
+	auto start = std::chrono::high_resolution_clock::now();
 	std::stringstream mapEntities(pMapEntities);
 	
 	EntityLumpEntry currentEntry;
@@ -59,4 +61,7 @@ void EntityLumpManager::Parse(const char* pMapEntities) {
 			currentEntry.emplace_back(match[1].str(), match[2].str());
 		}
 	}
+	auto stop = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<float> duration = stop - start;
+	rootconsole->ConsolePrint("Parsing %d entities took %f seconds", m_Entities.size(), duration.count());
 }
