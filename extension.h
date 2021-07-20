@@ -1,7 +1,7 @@
 /**
  * vim: set ts=4 :
  * =============================================================================
- * SourceMod Sample Extension
+ * Entity Lump Manager
  * Copyright (C) 2004-2008 AlliedModders LLC.  All rights reserved.
  * =============================================================================
  *
@@ -44,7 +44,7 @@
  * @brief Sample implementation of the SDK Extension.
  * Note: Uncomment one of the pre-defined virtual functions in order to use it.
  */
-class Sample : public SDKExtension
+class EntityLumpExt : public SDKExtension
 {
 public:
 	/**
@@ -55,18 +55,18 @@ public:
 	 * @param late		Whether or not the module was loaded after map load.
 	 * @return			True to succeed loading, false to fail.
 	 */
-	//virtual bool SDK_OnLoad(char *error, size_t maxlen, bool late);
+	virtual bool SDK_OnLoad(char *error, size_t maxlen, bool late);
 	
 	/**
 	 * @brief This is called right before the extension is unloaded.
 	 */
-	//virtual void SDK_OnUnload();
+	virtual void SDK_OnUnload();
 
 	/**
 	 * @brief This is called once all known extensions have been loaded.
 	 * Note: It is is a good idea to add natives here, if any are provided.
 	 */
-	//virtual void SDK_OnAllLoaded();
+	// virtual void SDK_OnAllLoaded();
 
 	/**
 	 * @brief Called when the pause state is changed.
@@ -114,6 +114,9 @@ public:
 	 */
 	//virtual bool SDK_OnMetamodPauseChange(bool paused, char *error, size_t maxlen);
 #endif
+	bool Hook_LevelInit(char const *pMapName, char const *pMapEntities, char const *pOldLevel, char const *pLandmarkName, bool loadGame, bool background);
+	
+	const char *Hook_GetMapEntitiesString();
 };
 
 #endif // _INCLUDE_SOURCEMOD_EXTENSION_PROPER_H_

@@ -31,11 +31,46 @@
 
 #include "extension.h"
 
+#include "lumpmanager.h"
+
+#include <string>
+
 /**
  * @file extension.cpp
  * @brief Implement extension code here.
  */
 
-Sample g_Sample;		/**< Global singleton for extension's main interface */
+EntityLumpExt g_EntityLumpExtension;		/**< Global singleton for extension's main interface */
 
-SMEXT_LINK(&g_Sample);
+SMEXT_LINK(&g_EntityLumpExtension);
+
+SH_DECL_HOOK6(IServerGameDLL, LevelInit, SH_NOATTRIB, false, bool, const char *, const char *, const char *, const char *, bool, bool);
+SH_DECL_HOOK0(IVEngineServer, GetMapEntitiesString, SH_NOATTRIB, 0, const char *);
+
+std::string g_strMapEntities;
+
+bool EntityLumpExt::SDK_OnLoad(char *error, size_t maxlen, bool late) {
+	SH_ADD_HOOK(IServerGameDLL, LevelInit, gamedll, SH_MEMBER(&g_EntityLumpExtension, &EntityLumpExt::Hook_LevelInit), false);
+	SH_ADD_HOOK(IVEngineServer, GetMapEntitiesString, engine, SH_MEMBER(&g_EntityLumpExtension, &EntityLumpExt::Hook_GetMapEntitiesString), false);
+	
+	return true;
+}
+
+void EntityLumpExt::SDK_OnUnload() {
+	SH_REMOVE_HOOK(IServerGameDLL, LevelInit, gamedll, SH_MEMBER(&g_EntityLumpExtension, &EntityLumpExt::Hook_LevelInit), false);
+	SH_REMOVE_HOOK(IVEngineServer, GetMapEntitiesString, engine, SH_MEMBER(&g_EntityLumpExtension, &EntityLumpExt::Hook_GetMapEntitiesString), false);
+}
+
+bool EntityLumpExt::Hook_LevelInit(char const *pMapName, char const *pMapEntities, char const *pOldLevel, char const *pLandmarkName, bool loadGame, bool background)
+{
+	lumpmanager->Parse(pMapEntities);
+
+	RETURN_META_VALUE(MRES_IGNORED, true);
+}
+
+const char* EntityLumpExt::Hook_GetMapEntitiesString() {
+	if (!g_strMapEntities.empty()) {
+		RETURN_META_VALUE(MRES_SUPERCEDE, g_strMapEntities.c_str());
+	}
+	RETURN_META_VALUE(MRES_IGNORED, NULL);
+}
