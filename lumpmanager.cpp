@@ -47,14 +47,16 @@ void EntityLumpManager::Parse(const char* pMapEntities) {
 	
 	std::stringstream mapEntities(pMapEntities);
 	
+	EntityLumpEntry currentEntry;
 	std::smatch match;
 	for (std::string line; std::getline(mapEntities, line);) {
-		// if (line == "{"
-		if (std::regex_match(line, match, keyValueLine)) {
-			std::string line_key = match[1].str();
-			std::string line_value = match[2].str();
-			
-			rootconsole->ConsolePrint("'%s' -> '%s'", line_key.c_str(), line_value.c_str());
+		if (line == "{") {
+			// TODO we should just be able to assert that this is empty, right?
+			currentEntry.clear();
+		} else if (line == "}") {
+			m_Entities.push_back(std::make_shared<EntityLumpEntry>(currentEntry));
+		} else if (std::regex_match(line, match, keyValueLine)) {
+			currentEntry.emplace_back(match[1].str(), match[2].str());
 		}
 	}
 }
