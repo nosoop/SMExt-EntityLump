@@ -61,7 +61,15 @@ public:
 	/**
 	 * @brief Returns a weak reference to an EntityLumpEntry.  Used for handles on the scripting side.
 	 */
-	// std::weak_ptr<EntityLumpEntry> Get(size_t index);
+	std::weak_ptr<EntityLumpEntry> Get(size_t index);
+
+	void Erase(size_t index);
+
+	void Insert(size_t index);
+
+	size_t Append();
+
+	size_t Length();
 
 private:
 	std::vector<std::shared_ptr<EntityLumpEntry>> m_Entities;

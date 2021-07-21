@@ -83,3 +83,23 @@ std::string EntityLumpManager::Dump() {
 	}
 	return stream.str();
 }
+
+std::weak_ptr<EntityLumpEntry> EntityLumpManager::Get(size_t index) {
+	return m_Entities[index];
+}
+
+void EntityLumpManager::Erase(size_t index) {
+	m_Entities.erase(m_Entities.begin() + index);
+}
+
+void EntityLumpManager::Insert(size_t index) {
+	m_Entities.emplace(m_Entities.begin() + index);
+}
+
+size_t EntityLumpManager::Append() {
+	return std::distance(m_Entities.begin(), m_Entities.emplace(m_Entities.end()));
+}
+
+size_t EntityLumpManager::Length() {
+	return m_Entities.size();
+}
