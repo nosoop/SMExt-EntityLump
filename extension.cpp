@@ -32,6 +32,7 @@
 #include "extension.h"
 
 #include "lumpmanager.h"
+#include "natives.h"
 
 #include <string>
 
@@ -53,12 +54,17 @@ bool EntityLumpExt::SDK_OnLoad(char *error, size_t maxlen, bool late) {
 	SH_ADD_HOOK(IServerGameDLL, LevelInit, gamedll, SH_MEMBER(&g_EntityLumpExtension, &EntityLumpExt::Hook_LevelInit), false);
 	SH_ADD_HOOK(IVEngineServer, GetMapEntitiesString, engine, SH_MEMBER(&g_EntityLumpExtension, &EntityLumpExt::Hook_GetMapEntitiesString), false);
 	
+	sharesys->AddNatives(myself, g_EntityLumpNatives);
+	g_EntityLumpEntryType = g_pHandleSys->CreateType("EntityLumpEntry", &g_EntityLumpEntryHandler, 0, NULL, NULL, myself->GetIdentity(), NULL);
+	
 	return true;
 }
 
 void EntityLumpExt::SDK_OnUnload() {
 	SH_REMOVE_HOOK(IServerGameDLL, LevelInit, gamedll, SH_MEMBER(&g_EntityLumpExtension, &EntityLumpExt::Hook_LevelInit), false);
 	SH_REMOVE_HOOK(IVEngineServer, GetMapEntitiesString, engine, SH_MEMBER(&g_EntityLumpExtension, &EntityLumpExt::Hook_GetMapEntitiesString), false);
+	
+	g_pHandleSys->RemoveType(g_EntityLumpEntryType, myself->GetIdentity());
 }
 
 bool EntityLumpExt::Hook_LevelInit(char const *pMapName, char const *pMapEntities, char const *pOldLevel, char const *pLandmarkName, bool loadGame, bool background)
