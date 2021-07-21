@@ -57,6 +57,10 @@ bool EntityLumpExt::SDK_OnLoad(char *error, size_t maxlen, bool late) {
 	sharesys->AddNatives(myself, g_EntityLumpNatives);
 	g_EntityLumpEntryType = g_pHandleSys->CreateType("EntityLumpEntry", &g_EntityLumpEntryHandler, 0, NULL, NULL, myself->GetIdentity(), NULL);
 	
+	if (late) {
+		lumpmanager->Parse(engine->GetMapEntitiesString());
+	}
+	
 	return true;
 }
 
