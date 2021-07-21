@@ -1,6 +1,8 @@
 # Entity Lump Manager 
 
-> :warning: This is (currently) not intended for production use.  See the following issues:
+> :warning: This is (currently) not intended for production use.
+> 
+> The intent is hopefully to upstream this to SourceMod, per the following issues:
 > 
 > - [alliedmodders/sourcemod#1534][issue_1534]
 > - [alliedmodders/sourcemod#1547][issue_1547]
