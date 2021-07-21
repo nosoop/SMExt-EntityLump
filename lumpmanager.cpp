@@ -47,7 +47,7 @@ void EntityLumpManager::Parse(const char* pMapEntities) {
 	m_Entities.clear();
 	
 	auto start = std::chrono::high_resolution_clock::now();
-	std::stringstream mapEntities(pMapEntities);
+	std::istringstream mapEntities(pMapEntities);
 	
 	EntityLumpEntry currentEntry;
 	std::smatch match;
@@ -69,7 +69,7 @@ void EntityLumpManager::Parse(const char* pMapEntities) {
 }
 
 std::string EntityLumpManager::Dump() {
-	std::stringstream stream;
+	std::ostringstream stream;
 	for (const auto& entry : m_Entities) {
 		// ignore empty entries
 		if ((*entry).empty()) {
