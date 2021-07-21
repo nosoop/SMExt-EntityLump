@@ -81,7 +81,7 @@ EntityLumpEntry FindEntityLumpEntryByHammerID(int hammerid) {
 			entry.Get(hidkey, .valbuf = value, .vallen = sizeof(value));
 			
 			if (StringToInt(value) == hammerid) {
-				EntityLump.Erase(i);
+				// EntityLump.Erase(i); // used this for testing the weakref handling
 				return entry;
 			}
 		}
