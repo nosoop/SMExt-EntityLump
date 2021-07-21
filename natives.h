@@ -53,9 +53,9 @@ cell_t sm_LumpManagerLength(IPluginContext *pContext, const cell_t *params);
 
 cell_t sm_LumpEntryGet(IPluginContext *pContext, const cell_t *params);
 cell_t sm_LumpEntryUpdate(IPluginContext *pContext, const cell_t *params);
-// cell_t sm_LumpEntryInsert(IPluginContext *pContext, const cell_t *params);
-// cell_t sm_LumpEntryErase(IPluginContext *pContext, const cell_t *params);
-// cell_t sm_LumpEntryAppend(IPluginContext *pContext, const cell_t *params);
+cell_t sm_LumpEntryInsert(IPluginContext *pContext, const cell_t *params);
+cell_t sm_LumpEntryErase(IPluginContext *pContext, const cell_t *params);
+cell_t sm_LumpEntryAppend(IPluginContext *pContext, const cell_t *params);
 cell_t sm_LumpEntryFindKey(IPluginContext *pContext, const cell_t *params);
 cell_t sm_LumpEntryLength(IPluginContext *pContext, const cell_t *params);
 
@@ -68,9 +68,9 @@ const sp_nativeinfo_t g_EntityLumpNatives[] = {
 	
 	{ "EntityLumpEntry.Get", sm_LumpEntryGet },
 	{ "EntityLumpEntry.Update", sm_LumpEntryUpdate },
-	// { "EntityLumpEntry.Insert", sm_LumpEntryInsert },
-	// { "EntityLumpEntry.Erase", sm_LumpEntryErase },
-	// { "EntityLumpEntry.Append", sm_LumpEntryAppend },
+	{ "EntityLumpEntry.Insert", sm_LumpEntryInsert },
+	{ "EntityLumpEntry.Erase", sm_LumpEntryErase },
+	{ "EntityLumpEntry.Append", sm_LumpEntryAppend },
 	{ "EntityLumpEntry.FindKey", sm_LumpEntryFindKey },
 	{ "EntityLumpEntry.Length.get", sm_LumpEntryLength },
 	

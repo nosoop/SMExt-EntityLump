@@ -153,9 +153,90 @@ cell_t sm_LumpEntryUpdate(IPluginContext *pContext, const cell_t *params) {
 	return 0;
 }
 
-// cell_t sm_LumpEntryInsert(IPluginContext *pContext, const cell_t *params);
-// cell_t sm_LumpEntryErase(IPluginContext *pContext, const cell_t *params);
-// cell_t sm_LumpEntryAppend(IPluginContext *pContext, const cell_t *params);
+cell_t sm_LumpEntryInsert(IPluginContext *pContext, const cell_t *params) {
+	HandleSecurity sec(pContext->GetIdentity(), myself->GetIdentity());
+	HandleError err;
+	
+	Handle_t hndl = static_cast<Handle_t>(params[1]);
+	
+	std::weak_ptr<EntityLumpEntry>* entryref = nullptr;
+	if ((err = g_pHandleSys->ReadHandle(hndl, g_EntityLumpEntryType, &sec, (void**) &entryref)) != HandleError_None) {
+		return pContext->ThrowNativeError("Invalid EntityLumpEntry handle %x (error %d)", hndl, err);
+	}
+	
+	if (entryref->expired()) {
+		return pContext->ThrowNativeError("EntityLumpEntry handle %x reference expired", hndl);
+	}
+	
+	auto entry = entryref->lock();
+	
+	int index = params[2];
+	if (index < 0 || index > static_cast<int>(entry->size())) {
+		return pContext->ThrowNativeError("Invalid index %d", index);
+	}
+	
+	char *key, *value;
+	pContext->LocalToString(params[3], &key);
+	pContext->LocalToString(params[4], &value);
+	
+	entry->emplace(entry->begin() + index, key, value);
+	
+	return 0;
+}
+
+cell_t sm_LumpEntryErase(IPluginContext *pContext, const cell_t *params) {
+	HandleSecurity sec(pContext->GetIdentity(), myself->GetIdentity());
+	HandleError err;
+	
+	Handle_t hndl = static_cast<Handle_t>(params[1]);
+	
+	std::weak_ptr<EntityLumpEntry>* entryref = nullptr;
+	if ((err = g_pHandleSys->ReadHandle(hndl, g_EntityLumpEntryType, &sec, (void**) &entryref)) != HandleError_None) {
+		return pContext->ThrowNativeError("Invalid EntityLumpEntry handle %x (error %d)", hndl, err);
+	}
+	
+	if (entryref->expired()) {
+		return pContext->ThrowNativeError("EntityLumpEntry handle %x reference expired", hndl);
+	}
+	
+	auto entry = entryref->lock();
+	
+	int index = params[2];
+	if (index < 0 || index >= static_cast<int>(entry->size())) {
+		return pContext->ThrowNativeError("Invalid index %d", index);
+	}
+	
+	entry->erase(entry->begin() + index);
+	
+	return 0;
+}
+
+cell_t sm_LumpEntryAppend(IPluginContext *pContext, const cell_t *params) {
+	HandleSecurity sec(pContext->GetIdentity(), myself->GetIdentity());
+	HandleError err;
+	
+	Handle_t hndl = static_cast<Handle_t>(params[1]);
+	
+	std::weak_ptr<EntityLumpEntry>* entryref = nullptr;
+	if ((err = g_pHandleSys->ReadHandle(hndl, g_EntityLumpEntryType, &sec, (void**) &entryref)) != HandleError_None) {
+		return pContext->ThrowNativeError("Invalid EntityLumpEntry handle %x (error %d)", hndl, err);
+	}
+	
+	if (entryref->expired()) {
+		return pContext->ThrowNativeError("EntityLumpEntry handle %x reference expired", hndl);
+	}
+	
+	auto entry = entryref->lock();
+	
+	char *key, *value;
+	pContext->LocalToString(params[2], &key);
+	pContext->LocalToString(params[3], &value);
+	
+	entry->emplace_back(key, value);
+	
+	return 0;
+}
+
 cell_t sm_LumpEntryFindKey(IPluginContext *pContext, const cell_t *params) {
 	HandleSecurity sec(pContext->GetIdentity(), myself->GetIdentity());
 	HandleError err;
