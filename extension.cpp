@@ -34,6 +34,7 @@
 #include "lumpmanager.h"
 #include "natives.h"
 
+#include <chrono>
 #include <string>
 
 /**
@@ -73,11 +74,21 @@ void EntityLumpExt::SDK_OnUnload() {
 
 bool EntityLumpExt::Hook_LevelInit(char const *pMapName, char const *pMapEntities, char const *pOldLevel, char const *pLandmarkName, bool loadGame, bool background)
 {
+	auto parsestart = std::chrono::high_resolution_clock::now();
+
 	lumpmanager->Parse(pMapEntities);
+
+	auto parsestop = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<float> parsetime = parsestop - parsestart;
+	rootconsole->ConsolePrint("Parsing %d entities took %f seconds", lumpmanager->Length(), parsetime.count());
 
 	// TODO void OnEntityLumpParsed()
 
+	auto dumpstart = std::chrono::high_resolution_clock::now();
 	g_strMapEntities = lumpmanager->Dump();
+	auto dumpstop = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<float> dumptime = dumpstop - dumpstart;
+	rootconsole->ConsolePrint("Dumping map entities took %f seconds", dumptime.count());
 
 	RETURN_META_VALUE(MRES_IGNORED, true);
 }
