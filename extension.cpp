@@ -51,6 +51,9 @@ SH_DECL_HOOK0(IVEngineServer, GetMapEntitiesString, SH_NOATTRIB, 0, const char *
 
 std::string g_strMapEntities;
 
+static EntityLumpManager s_LumpManager;
+EntityLumpManager* lumpmanager = &s_LumpManager;
+
 bool EntityLumpExt::SDK_OnLoad(char *error, size_t maxlen, bool late) {
 	SH_ADD_HOOK(IServerGameDLL, LevelInit, gamedll, SH_MEMBER(&g_EntityLumpExtension, &EntityLumpExt::Hook_LevelInit), false);
 	SH_ADD_HOOK(IVEngineServer, GetMapEntitiesString, engine, SH_MEMBER(&g_EntityLumpExtension, &EntityLumpExt::Hook_GetMapEntitiesString), false);

@@ -35,9 +35,6 @@
 #include <sstream>
 #include <string>
 
-static EntityLumpManager s_LumpManager;
-EntityLumpManager* lumpmanager = &s_LumpManager;
-
 /**
  * Reads a string from the given input stream, up to, but excluding line ending characters.
  *

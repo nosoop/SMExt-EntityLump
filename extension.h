@@ -38,7 +38,9 @@
  */
 
 #include "smsdk_ext.h"
+#include "lumpmanager.h"
 
+extern EntityLumpManager* lumpmanager;
 
 /**
  * @brief Sample implementation of the SDK Extension.

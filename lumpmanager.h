@@ -78,6 +78,4 @@ private:
 	std::vector<std::shared_ptr<EntityLumpEntry>> m_Entities;
 };
 
-extern EntityLumpManager* lumpmanager;
-
 #endif // _INCLUDE_SOURCEMOD_EXTENSION_PROPER_H_
