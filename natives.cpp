@@ -93,11 +93,11 @@ cell_t sm_LumpEntryGet(IPluginContext *pContext, const cell_t *params) {
 	
 	std::weak_ptr<EntityLumpEntry>* entryref = nullptr;
 	if ((err = g_pHandleSys->ReadHandle(hndl, g_EntityLumpEntryType, &sec, (void**) &entryref)) != HandleError_None) {
-		return pContext->ThrowNativeError("Invalid EntityLumpEntry handle %x (error %d)", hndl, err);
+		return pContext->ThrowNativeError("Invalid EntityLumpEntry handle %x (error: %d)", hndl, err);
 	}
 	
 	if (entryref->expired()) {
-		return pContext->ThrowNativeError("EntityLumpEntry handle %x reference expired", hndl);
+		return pContext->ThrowNativeError("Invalid EntityLumpEntry handle %x (reference expired)", hndl);
 	}
 	
 	auto entry = entryref->lock();
@@ -124,11 +124,11 @@ cell_t sm_LumpEntryUpdate(IPluginContext *pContext, const cell_t *params) {
 	
 	std::weak_ptr<EntityLumpEntry>* entryref = nullptr;
 	if ((err = g_pHandleSys->ReadHandle(hndl, g_EntityLumpEntryType, &sec, (void**) &entryref)) != HandleError_None) {
-		return pContext->ThrowNativeError("Invalid EntityLumpEntry handle %x (error %d)", hndl, err);
+		return pContext->ThrowNativeError("Invalid EntityLumpEntry handle %x (error: %d)", hndl, err);
 	}
 	
 	if (entryref->expired()) {
-		return pContext->ThrowNativeError("EntityLumpEntry handle %x reference expired", hndl);
+		return pContext->ThrowNativeError("Invalid EntityLumpEntry handle %x (reference expired)", hndl);
 	}
 	
 	auto entry = entryref->lock();
@@ -161,11 +161,11 @@ cell_t sm_LumpEntryInsert(IPluginContext *pContext, const cell_t *params) {
 	
 	std::weak_ptr<EntityLumpEntry>* entryref = nullptr;
 	if ((err = g_pHandleSys->ReadHandle(hndl, g_EntityLumpEntryType, &sec, (void**) &entryref)) != HandleError_None) {
-		return pContext->ThrowNativeError("Invalid EntityLumpEntry handle %x (error %d)", hndl, err);
+		return pContext->ThrowNativeError("Invalid EntityLumpEntry handle %x (error: %d)", hndl, err);
 	}
 	
 	if (entryref->expired()) {
-		return pContext->ThrowNativeError("EntityLumpEntry handle %x reference expired", hndl);
+		return pContext->ThrowNativeError("Invalid EntityLumpEntry handle %x (reference expired)", hndl);
 	}
 	
 	auto entry = entryref->lock();
@@ -192,11 +192,11 @@ cell_t sm_LumpEntryErase(IPluginContext *pContext, const cell_t *params) {
 	
 	std::weak_ptr<EntityLumpEntry>* entryref = nullptr;
 	if ((err = g_pHandleSys->ReadHandle(hndl, g_EntityLumpEntryType, &sec, (void**) &entryref)) != HandleError_None) {
-		return pContext->ThrowNativeError("Invalid EntityLumpEntry handle %x (error %d)", hndl, err);
+		return pContext->ThrowNativeError("Invalid EntityLumpEntry handle %x (error: %d)", hndl, err);
 	}
 	
 	if (entryref->expired()) {
-		return pContext->ThrowNativeError("EntityLumpEntry handle %x reference expired", hndl);
+		return pContext->ThrowNativeError("Invalid EntityLumpEntry handle %x (reference expired)", hndl);
 	}
 	
 	auto entry = entryref->lock();
@@ -219,11 +219,11 @@ cell_t sm_LumpEntryAppend(IPluginContext *pContext, const cell_t *params) {
 	
 	std::weak_ptr<EntityLumpEntry>* entryref = nullptr;
 	if ((err = g_pHandleSys->ReadHandle(hndl, g_EntityLumpEntryType, &sec, (void**) &entryref)) != HandleError_None) {
-		return pContext->ThrowNativeError("Invalid EntityLumpEntry handle %x (error %d)", hndl, err);
+		return pContext->ThrowNativeError("Invalid EntityLumpEntry handle %x (error: %d)", hndl, err);
 	}
 	
 	if (entryref->expired()) {
-		return pContext->ThrowNativeError("EntityLumpEntry handle %x reference expired", hndl);
+		return pContext->ThrowNativeError("Invalid EntityLumpEntry handle %x (reference expired)", hndl);
 	}
 	
 	auto entry = entryref->lock();
@@ -245,11 +245,11 @@ cell_t sm_LumpEntryFindKey(IPluginContext *pContext, const cell_t *params) {
 	
 	std::weak_ptr<EntityLumpEntry>* entryref = nullptr;
 	if ((err = g_pHandleSys->ReadHandle(hndl, g_EntityLumpEntryType, &sec, (void**) &entryref)) != HandleError_None) {
-		return pContext->ThrowNativeError("Invalid EntityLumpEntry handle %x (error %d)", hndl, err);
+		return pContext->ThrowNativeError("Invalid EntityLumpEntry handle %x (error: %d)", hndl, err);
 	}
 	
 	if (entryref->expired()) {
-		return pContext->ThrowNativeError("EntityLumpEntry handle %x reference expired", hndl);
+		return pContext->ThrowNativeError("Invalid EntityLumpEntry handle %x (reference expired)", hndl);
 	}
 	
 	// start from the index after the current one
@@ -284,11 +284,11 @@ cell_t sm_LumpEntryLength(IPluginContext *pContext, const cell_t *params) {
 	
 	std::weak_ptr<EntityLumpEntry>* entryref = nullptr;
 	if ((err = g_pHandleSys->ReadHandle(hndl, g_EntityLumpEntryType, &sec, (void**) &entryref)) != HandleError_None) {
-		return pContext->ThrowNativeError("Invalid EntityLumpEntry handle %x (error %d)", hndl, err);
+		return pContext->ThrowNativeError("Invalid EntityLumpEntry handle %x (error: %d)", hndl, err);
 	}
 	
 	if (entryref->expired()) {
-		return pContext->ThrowNativeError("EntityLumpEntry handle %x reference expired", hndl);
+		return pContext->ThrowNativeError("Invalid EntityLumpEntry handle %x (reference expired)", hndl);
 	}
 	
 	auto entry = entryref->lock();
