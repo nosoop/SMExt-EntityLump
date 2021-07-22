@@ -1,0 +1,11 @@
+{
+"world_maxs" "3112 -1087 1060"
+"world_mins" "-6616 -7896 -1566"
+"skyname" "sky_nightfall_01"
+"maxpropscreenwidth" "-1"
+"detailvbsp" "detail_trainyard.vbsp"
+"detailmaterial" "detail/detailsprites_trainyard"
+"classname" "worldspawn"
+"mapversion" "4251"
+"hammerid" "1"
+}

@@ -15,3 +15,6 @@
 *.PDF	 diff=astextplain
 *.rtf	 diff=astextplain
 *.RTF	 diff=astextplain
+
+# Unset the text attribute on entity lump files to prevent LF normalization
+*.ent	-text

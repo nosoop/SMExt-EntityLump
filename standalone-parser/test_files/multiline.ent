@@ -1,0 +1,22 @@
+{
+    "id" "2708531"
+    "origin" "-13026 14610 8"
+    "y" ".3"
+    "x" ".05"
+    "targetname" "Knife_Frost_HudHint"
+    "spawnflags" "0"
+    "message" "Name: Frost Magick 
+Description: Ice Age ! 
+Effect: Slow Humans 
+Duration: 4 Secs 
+Cooldown: 90 Secs"
+    "holdtime" "7"
+    "fxtime" "0.5"
+    "fadeout" "2"
+    "fadein" ".02"
+    "effect" "2"
+    "color2" "128 255 255"
+    "color" "0 255 255"
+    "channel" "4"
+    "classname" "game_text"
+}
