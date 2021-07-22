@@ -29,7 +29,6 @@
  * Version: $Id$
  */
 
-#include "extension.h"
 #include "lumpmanager.h"
 
 #include <regex>

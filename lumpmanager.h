@@ -32,6 +32,9 @@
 #ifndef _INCLUDE_LUMPMANAGER_H_
 #define _INCLUDE_LUMPMANAGER_H_
 
+#include <vector>
+#include <memory>
+
 /**
  * @file lumpmanager.h
  * @brief Class definition for object that parses lumps.
