@@ -431,6 +431,12 @@ class ExtensionConfig(object):
     binary = project.Configure(name, '{0} - {1}'.format(self.tag, sdk.name))
     return self.ConfigureForHL2(binary, sdk)
 
+  def Program(self, context, name):
+    binary = context.compiler.Program(name)
+    if binary.compiler.like('msvc'):
+      binary.compiler.linkflags.append('/SUBSYSTEM:CONSOLE')
+    return binary
+
 Extension = ExtensionConfig()
 Extension.detectSDKs()
 Extension.configure()
@@ -438,6 +444,7 @@ Extension.configure()
 # Add additional buildscripts here
 BuildScripts = [
   'AMBuilder',
+  'standalone-parser/AMBuilder',
 ]
 
 if builder.backend == 'amb2':

@@ -1,0 +1,15 @@
+# vim: set sts=2 ts=8 sw=2 tw=99 et ft=python: 
+import os
+
+binary = Extension.Program(builder, 'entlump_parser')
+
+binary.sources += [
+  'console_main.cpp',
+  '../lumpmanager.cpp',
+]
+
+binary.compiler.includes += [
+  os.path.join(builder.sourcePath),
+]
+
+builder.Add(binary)
