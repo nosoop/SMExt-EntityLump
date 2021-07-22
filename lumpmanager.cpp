@@ -78,7 +78,8 @@ std::istream& getline_any_eol(std::istream& is, std::string& t) {
 
 void EntityLumpManager::Parse(const char* pMapEntities) {
 	// Pattern copied from alliedmodders/stripper-source/master/parser.cpp
-	static std::regex keyValueLine("\"([^\"]+)\"\\s+\"([^\"]+)\"");
+	static std::regex keyValueLine("\\s*\"([^\"]+)\"\\s+\"([^\"]+)\"\\s*");
+	static std::regex keyValuePartial("\\s*\"([^\"]+)\"\\s+\"([^\"]+)$");
 	
 	m_Entities.clear();
 	
@@ -96,6 +97,19 @@ void EntityLumpManager::Parse(const char* pMapEntities) {
 			m_Entities.push_back(std::make_shared<EntityLumpEntry>(currentEntry));
 		} else if (std::regex_match(line, match, keyValueLine)) {
 			currentEntry.emplace_back(match[1].str(), match[2].str());
+		} else if (std::regex_match(line, match, keyValuePartial)) {
+			// extract multiline key/value entry
+			std::string nextline;
+			std::ostringstream lines;
+			lines << line;
+			while (std::getline(mapEntities, nextline)) {
+				lines << '\n' << nextline;
+				std::string out = static_cast<std::string>(lines.str());
+				if (std::regex_match(out, match, keyValueLine)) {
+					currentEntry.emplace_back(match[1].str(), match[2].str());
+					break;
+				}
+			}
 		}
 	}
 }
