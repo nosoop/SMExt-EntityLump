@@ -119,6 +119,12 @@ methodmap EntityLump {
 	public static native int Length();
 };
 
+/**
+ * Called when the level is initialized and the map entity string has been parsed.
+ * Plugins have write access to `EntityLumpEntry` handles only during this forward.
+ */
+forward void OnMapEntitiesParsed();
+
 public Extension __ext_entitylump = {
 	name = "Entity Lump Manager",
 	file = "entitylump.ext",

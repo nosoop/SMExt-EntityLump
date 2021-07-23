@@ -54,12 +54,16 @@ std::string g_strMapEntities;
 static EntityLumpManager s_LumpManager;
 EntityLumpManager* lumpmanager = &s_LumpManager;
 
+IForward* fwdMapEntitiesParsed;
+
 bool EntityLumpExt::SDK_OnLoad(char *error, size_t maxlen, bool late) {
 	SH_ADD_HOOK(IServerGameDLL, LevelInit, gamedll, SH_MEMBER(&g_EntityLumpExtension, &EntityLumpExt::Hook_LevelInit), false);
 	SH_ADD_HOOK(IVEngineServer, GetMapEntitiesString, engine, SH_MEMBER(&g_EntityLumpExtension, &EntityLumpExt::Hook_GetMapEntitiesString), false);
 	
 	sharesys->AddNatives(myself, g_EntityLumpNatives);
 	g_EntityLumpEntryType = g_pHandleSys->CreateType("EntityLumpEntry", &g_EntityLumpEntryHandler, 0, NULL, NULL, myself->GetIdentity(), NULL);
+	
+	fwdMapEntitiesParsed = forwards->CreateForward("OnMapEntitiesParsed", ET_Ignore, 0, NULL);
 	
 	if (late) {
 		lumpmanager->Parse(engine->GetMapEntitiesString());
@@ -73,6 +77,8 @@ void EntityLumpExt::SDK_OnUnload() {
 	SH_REMOVE_HOOK(IVEngineServer, GetMapEntitiesString, engine, SH_MEMBER(&g_EntityLumpExtension, &EntityLumpExt::Hook_GetMapEntitiesString), false);
 	
 	g_pHandleSys->RemoveType(g_EntityLumpEntryType, myself->GetIdentity());
+	
+	forwards->ReleaseForward(fwdMapEntitiesParsed);
 }
 
 bool EntityLumpExt::Hook_LevelInit(char const *pMapName, char const *pMapEntities, char const *pOldLevel, char const *pLandmarkName, bool loadGame, bool background)
@@ -85,7 +91,8 @@ bool EntityLumpExt::Hook_LevelInit(char const *pMapName, char const *pMapEntitie
 	std::chrono::duration<float> parsetime = parsestop - parsestart;
 	rootconsole->ConsolePrint("Parsing %d entities took %f seconds", lumpmanager->Length(), parsetime.count());
 
-	// TODO void OnEntityLumpParsed()
+	cell_t result{};
+	fwdMapEntitiesParsed->Execute(&result);
 
 	auto dumpstart = std::chrono::high_resolution_clock::now();
 	g_strMapEntities = lumpmanager->Dump();
