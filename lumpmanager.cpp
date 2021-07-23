@@ -31,83 +31,42 @@
 
 #include "lumpmanager.h"
 
-#include <regex>
+#include <iomanip>
 #include <sstream>
-#include <string>
-
-/**
- * Reads a string from the given input stream, up to, but excluding line ending characters.
- *
- * Function sourced from https://stackoverflow.com/a/6089413 (CC BY-SA 3.0)
- * Name and indentation has been modified
- */
-std::istream& getline_any_eol(std::istream& is, std::string& t) {
-	t.clear();
-
-	// The characters in the stream are read one-by-one using a std::streambuf.
-	// That is faster than reading them one-by-one using the std::istream.
-	// Code that uses streambuf this way must be guarded by a sentry object.
-	// The sentry object performs various tasks,
-	// such as thread synchronization and updating the stream state.
-
-	std::istream::sentry se(is, true);
-	std::streambuf* sb = is.rdbuf();
-
-	for(;;) {
-		int c = sb->sbumpc();
-		switch (c) {
-		case '\n':
-			return is;
-		case '\r':
-			if(sb->sgetc() == '\n')
-				sb->sbumpc();
-			return is;
-		case std::streambuf::traits_type::eof():
-			// Also handle the case when the last line has no line ending
-			if(t.empty())
-				is.setstate(std::ios::eofbit);
-			return is;
-		default:
-			t += (char)c;
-		}
-	}
-}
 
 void EntityLumpManager::Parse(const char* pMapEntities) {
-	// Pattern copied from alliedmodders/stripper-source/master/parser.cpp
-	static std::regex keyValueLine("\\s*\"([^\"]+)\"\\s+\"([^\"]+)\"\\s*");
-	static std::regex keyValuePartial("\\s*\"([^\"]+)\"\\s+\"([^\"]+)$");
-	
 	m_Entities.clear();
 	
 	std::istringstream mapEntities(pMapEntities);
 	
-	EntityLumpEntry currentEntry;
-	std::smatch match;
-	
-	// TODO rework the parser logic
-	for (std::string line; !getline_any_eol(mapEntities, line).eof();) {
-		if (line == "{") {
-			// TODO we should just be able to assert that this is empty, right?
-			currentEntry.clear();
-		} else if (line == "}") {
-			m_Entities.push_back(std::make_shared<EntityLumpEntry>(currentEntry));
-		} else if (std::regex_match(line, match, keyValueLine)) {
-			currentEntry.emplace_back(match[1].str(), match[2].str());
-		} else if (std::regex_match(line, match, keyValuePartial)) {
-			// extract multiline key/value entry
-			std::string nextline;
-			std::ostringstream lines;
-			lines << line;
-			while (std::getline(mapEntities, nextline)) {
-				lines << '\n' << nextline;
-				std::string out = static_cast<std::string>(lines.str());
-				if (std::regex_match(out, match, keyValueLine)) {
-					currentEntry.emplace_back(match[1].str(), match[2].str());
-					break;
-				}
-			}
+	for (;;) {
+		std::string token;
+		mapEntities >> std::ws >> token >> std::ws;
+		
+		// Assert that we're at the start of a new block, otherwise we're done parsing
+		if (token != "{") {
+			break;
 		}
+		
+		/**
+		 * Parse key / value pairs until we reach a closing brace.  We currently assume there
+		 * are only quoted keys / values up to the next closing brace.
+		 *
+		 * The SDK suggests that there are cases that could use non-quoted symbols and nested
+		 * braces (`shared/mapentities_shared.cpp::MapEntity_ParseToken`), but I haven't seen
+		 * those in practice.
+		 *
+		 * TODO find unusual cases and implement parsing on them
+		 */
+		EntityLumpEntry entry;
+		while (mapEntities.peek() != '}') {
+			std::string key, value;
+			mapEntities >> quoted(key) >> quoted(value) >> std::ws;
+			
+			entry.emplace_back(key, value);
+		}
+		mapEntities >> token;
+		m_Entities.push_back(std::make_shared<EntityLumpEntry>(entry));
 	}
 }
 
