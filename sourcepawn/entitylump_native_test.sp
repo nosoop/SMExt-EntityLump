@@ -50,10 +50,8 @@ public void OnMapStart() {
 	}
 	
 	LogMessage("---- %s", "List of " ... OUTPUT_NAME ... " outputs:");
-	for (int k = -1; (k = entry.FindKey(OUTPUT_NAME, k)) != -1;) {
-		char outputString[256];
-		entry.Get(k, _, _, outputString, sizeof(outputString));
-		
+	char outputString[256];
+	for (int k = -1; (k = entry.GetNextKey(OUTPUT_NAME, outputString, sizeof(outputString), k)) != -1;) {
 		char targetName[32], inputName[64], variantValue[32];
 		float delay;
 		int nFireCount;
@@ -75,15 +73,10 @@ EntityLumpEntry FindEntityLumpEntryByHammerID(int hammerid) {
 	for (int i, n = EntityLump.Length(); i < n; i++) {
 		EntityLumpEntry entry = EntityLump.Get(i);
 		
-		int hidkey = entry.FindKey("hammerid");
-		if (hidkey != -1) {
-			char value[32];
-			entry.Get(hidkey, .valbuf = value, .vallen = sizeof(value));
-			
-			if (StringToInt(value) == hammerid) {
-				// EntityLump.Erase(i); // used this for testing the weakref handling
-				return entry;
-			}
+		char value[32];
+		if (entry.GetNextKey("hammerid", value, sizeof(value)) != -1
+				&& StringToInt(value) == hammerid) {
+			return entry;
 		}
 		delete entry;
 	}

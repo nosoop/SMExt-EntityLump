@@ -49,8 +49,26 @@ methodmap EntityLumpEntry < Handle {
 	
 	/**
 	 * Returns the next index with the matching key, or -1 if not found.
+	 *
+	 * @error Index is out of bounds or entity lump is read-only.
 	 */
 	public native int FindKey(const char[] key, int start = -1);
+	
+	/**
+	 * Returns the next index with the matching key, or -1 if not found.
+	 * This also copies the value from that index into the given buffer.
+	 *
+	 * @error Index is out of bounds or entity lump is read-only.
+	 */
+	public int GetNextKey(const char[] key, char[] buffer, int maxlen, int start = -1) {
+		int result = this.FindKey(key, start);
+		if (result != -1) {
+			this.Get(result, .valbuf = buffer, .vallen = maxlen);
+		} else {
+			buffer[0] = '\0';
+		}
+		return result;
+	}
 	
 	/**
 	 * Returns the number of key / value pairs in the list.
