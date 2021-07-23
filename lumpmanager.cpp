@@ -95,11 +95,14 @@ void EntityLumpManager::Erase(size_t index) {
 }
 
 void EntityLumpManager::Insert(size_t index) {
-	m_Entities.emplace(m_Entities.begin() + index);
+	m_Entities.emplace(m_Entities.begin() + index, std::make_shared<EntityLumpEntry>());
 }
 
 size_t EntityLumpManager::Append() {
-	return std::distance(m_Entities.begin(), m_Entities.emplace(m_Entities.end()));
+	return std::distance(
+			m_Entities.begin(),
+			m_Entities.emplace(m_Entities.end(), std::make_shared<EntityLumpEntry>())
+	);
 }
 
 size_t EntityLumpManager::Length() {

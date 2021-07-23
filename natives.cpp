@@ -69,7 +69,7 @@ cell_t sm_LumpManagerErase(IPluginContext *pContext, const cell_t *params) {
 
 cell_t sm_LumpManagerInsert(IPluginContext *pContext, const cell_t *params) {
 	int index = params[1];
-	if (index < 0 || index >= static_cast<int>(lumpmanager->Length())) {
+	if (index < 0 || index > static_cast<int>(lumpmanager->Length())) {
 		return pContext->ThrowNativeError("Invalid index %d", index);
 	}
 	
