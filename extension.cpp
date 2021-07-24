@@ -99,7 +99,7 @@ bool EntityLumpExt::Hook_LevelInit(char const *pMapName, char const *pMapEntitie
 	std::chrono::duration<float> dumptime = dumpstop - dumpstart;
 	rootconsole->ConsolePrint("Dumping map entities took %f seconds", dumptime.count());
 
-	RETURN_META_VALUE(MRES_IGNORED, true);
+	RETURN_META_VALUE_NEWPARAMS(MRES_HANDLED, true, &IServerGameDLL::LevelInit, (pMapName, g_strMapEntities.c_str(), pOldLevel, pLandmarkName, loadGame, background));
 }
 
 const char* EntityLumpExt::Hook_GetMapEntitiesString() {
