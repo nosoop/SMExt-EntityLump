@@ -91,8 +91,7 @@ bool EntityLumpExt::Hook_LevelInit(char const *pMapName, char const *pMapEntitie
 	std::chrono::duration<float> parsetime = parsestop - parsestart;
 	rootconsole->ConsolePrint("Parsing %d entities took %f seconds", lumpmanager->Length(), parsetime.count());
 
-	cell_t result{};
-	fwdMapEntitiesParsed->Execute(&result);
+	fwdMapEntitiesParsed->Execute();
 
 	auto dumpstart = std::chrono::high_resolution_clock::now();
 	g_strMapEntities = lumpmanager->Dump();
