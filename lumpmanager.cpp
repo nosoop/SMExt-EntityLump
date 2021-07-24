@@ -74,11 +74,11 @@ std::string EntityLumpManager::Dump() {
 	std::ostringstream stream;
 	for (const auto& entry : m_Entities) {
 		// ignore empty entries
-		if ((*entry).empty()) {
+		if (entry->empty()) {
 			continue;
 		}
 		stream << "{\n";
-		for (const auto& pair : (*entry)) {
+		for (const auto& pair : *entry) {
 			stream << '"' << pair.first << "\"	\"" << pair.second << '"' << '\n';
 		}
 		stream << "}\n";
