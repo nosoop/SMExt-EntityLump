@@ -51,6 +51,8 @@ SH_DECL_HOOK0(IVEngineServer, GetMapEntitiesString, SH_NOATTRIB, 0, const char *
 
 std::string g_strMapEntities;
 
+bool g_bLumpAvailableForWriting = false;
+
 static EntityLumpManager s_LumpManager;
 EntityLumpManager* lumpmanager = &s_LumpManager;
 
@@ -92,7 +94,9 @@ bool EntityLumpExt::Hook_LevelInit(char const *pMapName, char const *pMapEntitie
 		RETURN_META_VALUE(MRES_IGNORED, true);
 	}
 	
+	g_bLumpAvailableForWriting = true;
 	fwdMapEntitiesParsed->Execute();
+	g_bLumpAvailableForWriting = false;
 	
 	g_strMapEntities = lumpmanager->Dump();
 	RETURN_META_VALUE_NEWPARAMS(MRES_HANDLED, true, &IServerGameDLL::LevelInit, (pMapName, g_strMapEntities.c_str(), pOldLevel, pLandmarkName, loadGame, background));

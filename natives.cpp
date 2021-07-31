@@ -58,6 +58,10 @@ cell_t sm_LumpManagerGet(IPluginContext *pContext, const cell_t *params) {
 }
 
 cell_t sm_LumpManagerErase(IPluginContext *pContext, const cell_t *params) {
+	if (!g_bLumpAvailableForWriting) {
+		return pContext->ThrowNativeError("Cannot use EntityLump.Erase() while in read-only mode");
+	}
+	
 	int index = params[1];
 	if (index < 0 || index >= static_cast<int>(lumpmanager->Length())) {
 		return pContext->ThrowNativeError("Invalid index %d", index);
@@ -68,6 +72,10 @@ cell_t sm_LumpManagerErase(IPluginContext *pContext, const cell_t *params) {
 }
 
 cell_t sm_LumpManagerInsert(IPluginContext *pContext, const cell_t *params) {
+	if (!g_bLumpAvailableForWriting) {
+		return pContext->ThrowNativeError("Cannot use EntityLump.Insert() while in read-only mode");
+	}
+	
 	int index = params[1];
 	if (index < 0 || index > static_cast<int>(lumpmanager->Length())) {
 		return pContext->ThrowNativeError("Invalid index %d", index);
@@ -78,6 +86,9 @@ cell_t sm_LumpManagerInsert(IPluginContext *pContext, const cell_t *params) {
 }
 
 cell_t sm_LumpManagerAppend(IPluginContext *pContext, const cell_t *params) {
+	if (!g_bLumpAvailableForWriting) {
+		return pContext->ThrowNativeError("Cannot use EntityLump.Append() while in read-only mode");
+	}
 	return lumpmanager->Append();
 }
 
@@ -131,6 +142,10 @@ cell_t sm_LumpEntryUpdate(IPluginContext *pContext, const cell_t *params) {
 		return pContext->ThrowNativeError("Invalid EntityLumpEntry handle %x (reference expired)", hndl);
 	}
 	
+	if (!g_bLumpAvailableForWriting) {
+		return pContext->ThrowNativeError("Cannot use EntityLumpEntry.Update() while in read-only mode");
+	}
+	
 	auto entry = entryref->lock();
 	
 	int index = params[2];
@@ -168,6 +183,10 @@ cell_t sm_LumpEntryInsert(IPluginContext *pContext, const cell_t *params) {
 		return pContext->ThrowNativeError("Invalid EntityLumpEntry handle %x (reference expired)", hndl);
 	}
 	
+	if (!g_bLumpAvailableForWriting) {
+		return pContext->ThrowNativeError("Cannot use EntityLumpEntry.Insert() while in read-only mode");
+	}
+	
 	auto entry = entryref->lock();
 	
 	int index = params[2];
@@ -199,6 +218,10 @@ cell_t sm_LumpEntryErase(IPluginContext *pContext, const cell_t *params) {
 		return pContext->ThrowNativeError("Invalid EntityLumpEntry handle %x (reference expired)", hndl);
 	}
 	
+	if (!g_bLumpAvailableForWriting) {
+		return pContext->ThrowNativeError("Cannot use EntityLumpEntry.Erase() while in read-only mode");
+	}
+	
 	auto entry = entryref->lock();
 	
 	int index = params[2];
@@ -224,6 +247,10 @@ cell_t sm_LumpEntryAppend(IPluginContext *pContext, const cell_t *params) {
 	
 	if (entryref->expired()) {
 		return pContext->ThrowNativeError("Invalid EntityLumpEntry handle %x (reference expired)", hndl);
+	}
+	
+	if (!g_bLumpAvailableForWriting) {
+		return pContext->ThrowNativeError("Cannot use EntityLumpEntry.Append() while in read-only mode");
 	}
 	
 	auto entry = entryref->lock();

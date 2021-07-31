@@ -41,6 +41,7 @@
 #include "lumpmanager.h"
 
 extern EntityLumpManager* lumpmanager;
+extern bool g_bLumpAvailableForWriting;
 
 /**
  * @brief Sample implementation of the SDK Extension.
