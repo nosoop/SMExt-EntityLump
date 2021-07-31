@@ -45,6 +45,23 @@
  */
 using EntityLumpEntry = std::vector<std::pair<std::string, std::string>>;
 
+enum EntityLumpParseStatus {
+	Status_OK,
+	Status_UnexpectedChar,
+};
+
+/**
+ * @brief Result of parsing an entity lump.  On a parse error, m_Status is not Status_OK and
+ * m_Position indicates the offset within the string that caused the parse error.
+ */
+struct EntityLumpParseResult {
+	EntityLumpParseStatus m_Status;
+	std::streamoff m_Position;
+	
+	operator bool() const;
+	const char* Description() const;
+};
+
 /**
  * @brief Manages entity lump entries.
  */
@@ -54,7 +71,7 @@ public:
 	/**
 	 * @brief Parses the map entities string into an internal representation.
 	 */
-	void Parse(const char* pMapEntities);
+	EntityLumpParseResult Parse(const char* pMapEntities);
 	
 	/**
 	 * @brief Dumps the current internal representation out to an std::string.

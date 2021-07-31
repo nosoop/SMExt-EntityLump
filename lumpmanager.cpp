@@ -34,7 +34,11 @@
 #include <iomanip>
 #include <sstream>
 
-void EntityLumpManager::Parse(const char* pMapEntities) {
+EntityLumpParseResult::operator bool() const {
+	return m_Status == Status_OK;
+}
+
+EntityLumpParseResult EntityLumpManager::Parse(const char* pMapEntities) {
 	m_Entities.clear();
 	
 	std::istringstream mapEntities(pMapEntities);
@@ -45,7 +49,13 @@ void EntityLumpManager::Parse(const char* pMapEntities) {
 		
 		// Assert that we're at the start of a new block, otherwise we're done parsing
 		if (token != "{") {
-			break;
+			if (token == "\0") {
+				break;
+			} else {
+				return EntityLumpParseResult {
+					Status_UnexpectedChar, mapEntities.tellg()
+				};
+			}
 		}
 		
 		/**
@@ -56,18 +66,34 @@ void EntityLumpManager::Parse(const char* pMapEntities) {
 		 * braces (`shared/mapentities_shared.cpp::MapEntity_ParseToken`), but I haven't seen
 		 * those in practice.
 		 *
-		 * TODO find unusual cases and implement parsing on them
+		 * TODO find unusual cases and implement parsing on them, or at least gracefully handle
+		 * parser errors
 		 */
 		EntityLumpEntry entry;
 		while (mapEntities.peek() != '}') {
 			std::string key, value;
-			mapEntities >> quoted(key) >> quoted(value) >> std::ws;
+			
+			if (mapEntities.peek() != '"') {
+				return EntityLumpParseResult {
+					Status_UnexpectedChar, mapEntities.tellg()
+				};
+			}
+			mapEntities >> quoted(key) >> std::ws;
+			
+			if (mapEntities.peek() != '"') {
+				return EntityLumpParseResult {
+					Status_UnexpectedChar, mapEntities.tellg()
+				};
+			}
+			mapEntities >> quoted(value) >> std::ws;
 			
 			entry.emplace_back(key, value);
 		}
 		mapEntities >> token;
 		m_Entities.push_back(std::make_shared<EntityLumpEntry>(entry));
 	}
+	
+	return EntityLumpParseResult{};
 }
 
 std::string EntityLumpManager::Dump() {

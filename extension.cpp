@@ -83,7 +83,14 @@ void EntityLumpExt::SDK_OnUnload() {
 
 bool EntityLumpExt::Hook_LevelInit(char const *pMapName, char const *pMapEntities, char const *pOldLevel, char const *pLandmarkName, bool loadGame, bool background)
 {
-	lumpmanager->Parse(pMapEntities);
+	EntityLumpParseResult result = lumpmanager->Parse(pMapEntities);
+	
+	// TODO should we raise plugin exceptions when trying to access an unparsed entity lump?
+	if (!result) {
+		g_strMapEntities.clear();
+		g_pSM->LogError(myself, "Map entity lump parsing for %s failed with error code %d on position %d", pMapName, result.m_Status, result.m_Position);
+		RETURN_META_VALUE(MRES_IGNORED, true);
+	}
 	
 	fwdMapEntitiesParsed->Execute();
 	
