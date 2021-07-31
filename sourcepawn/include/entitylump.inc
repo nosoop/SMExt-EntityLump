@@ -5,7 +5,7 @@
 #define __entitylump_ext
 
 /**
- * A handle to a weakref of a list of key / value pairs; any write operations on this handle will affect the resulting map entity string.
+ * A handle to a weakref of an ordered list of key / value pairs; any write operations on this handle will affect the resulting map entity string.
  * If the entry in the EntityLump is removed, the handle will error on all operations.
  * (The handle will remain valid on the scripting side, and will still need to be deleted.)
  */
@@ -26,7 +26,7 @@ methodmap EntityLumpEntry < Handle {
 	public native void Update(int index, const char[] key = NULL_STRING, const char[] value = NULL_STRING);
 	
 	/**
-	 * Inserts a new key / value pair at the given index, shifting the existing entry and ones past it up.
+	 * Inserts a new key / value pair at the given index, shifting the pair at that index and beyond up.
 	 * If EntityLumpEntry.Length is passed in, this is an append operation.
 	 *
 	 * @error Index is out of bounds or entity lump is read-only.
@@ -48,17 +48,15 @@ methodmap EntityLumpEntry < Handle {
 	public native void Append(const char[] key, const char[] value);
 	
 	/**
-	 * Returns the next index with the matching key, or -1 if not found.
-	 *
-	 * @error Index is out of bounds or entity lump is read-only.
+	 * Returns the first index after `start` with the matching key, or -1 if not found.
 	 */
 	public native int FindKey(const char[] key, int start = -1);
 	
 	/**
-	 * Returns the next index with the matching key, or -1 if not found.
+	 * Returns the first index after `start` with the matching key, or -1 if not found.
 	 * This also copies the value from that index into the given buffer.
 	 *
-	 * @error Index is out of bounds or entity lump is read-only.
+	 * @error `start` is out of bounds and not -1.
 	 */
 	public int GetNextKey(const char[] key, char[] buffer, int maxlen, int start = -1) {
 		int result = this.FindKey(key, start);
@@ -92,15 +90,15 @@ methodmap EntityLump {
 	public static native EntityLumpEntry Get(int index);
 	
 	/**
-	 * Erases an EntityLumpEntry at the given index.
-	 * Any handles referencing that EntityLumpEntry are invalidated.
+	 * Erases an EntityLumpEntry at the given index, shifting all entries past it down.
+	 * Any handles referencing the erased EntityLumpEntry will throw on any operations aside from delete.
 	 *
 	 * @error Index is out of bounds or entity lump is read-only.
 	 */
 	public static native void Erase(int index);
 	
 	/**
-	 * Inserts an empty EntityLumpEntry at the given index.
+	 * Inserts an empty EntityLumpEntry at the given index, shifting the existing entry and ones past it up.
 	 *
 	 * @error Index is out of bounds or entity lump is read-only.
 	 */
