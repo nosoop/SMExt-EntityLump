@@ -20,6 +20,20 @@ public Plugin myinfo = {
 
 #define OUTPUT_NAME "OnCapTeam2"
 
+public void OnMapEntitiesParsed() {
+	// set every area_time_to_cap value to 30
+	for (int i, n = EntityLump.Length(); i < n; i++) {
+		EntityLumpEntry entry = EntityLump.Get(i);
+		
+		int ttc = entry.FindKey("area_time_to_cap");
+		if (ttc != -1) {
+			entry.Update(ttc, NULL_STRING, "30");
+		}
+		
+		delete entry;
+	}
+}
+
 public void OnMapStart() {
 	int captureArea = FindEntityByClassname(-1, "trigger_capture_area");
 	
@@ -33,11 +47,6 @@ public void OnMapStart() {
 	
 	if (!entry) {
 		return;
-	}
-	
-	int ttc = entry.FindKey("area_time_to_cap");
-	if (ttc != -1) {
-		entry.Update(ttc, NULL_STRING, "30");
 	}
 	
 	LogMessage("---- %s", "Found a trigger_capture_area with keys:");
