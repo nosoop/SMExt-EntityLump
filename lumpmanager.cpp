@@ -89,7 +89,7 @@ EntityLumpParseResult EntityLumpManager::Parse(const char* pMapEntities) {
 			
 			entry.emplace_back(key, value);
 		}
-		mapEntities >> token;
+		mapEntities.get();
 		m_Entities.push_back(std::make_shared<EntityLumpEntry>(entry));
 	}
 	
