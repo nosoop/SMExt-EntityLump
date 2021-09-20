@@ -1,0 +1,23 @@
+{
+"world_maxs" "1408 2104 536"
+"world_mins" "-1408 -2048 -232"
+"skyname" "sky_cs15_daylight02_hdr"
+"maxpropscreenwidth" "-1"
+"detailvbsp" "detail.vbsp"
+"detailmaterial" "detail/detailsprites"
+"classname" "worldspawn"
+"mapversion" "1428"
+"hammerid" "1"
+}{
+"origin" "126 1212 72"
+"priority" "0"
+"angles" "0 292 0"
+"classname" "info_player_terrorist"
+"hammerid" "464742"
+}{
+"origin" "70 1230 72"
+"priority" "0"
+"angles" "0 302.5 0"
+"classname" "info_player_terrorist"
+"hammerid" "464744"
+}
