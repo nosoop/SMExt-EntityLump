@@ -1,18 +1,14 @@
 # Entity Lump Manager 
 
-> :warning: This is (currently) not intended for production use.  While it works pretty well in
-> my tests, the intent is hopefully to upstream this to SourceMod, per the following issues:
+> &#8505;&#65039; This repository is no longer active.  This extension has been merged into
+> SourceMod as [alliedmodders/sourcemod#1673][pr_1673].  It should also be available in
+> SourceMod 1.11 in the future.
 > 
-> - [alliedmodders/sourcemod#1534][issue_1534]
-> - [alliedmodders/sourcemod#1547][issue_1547]
-> 
-> If that plan doesn't work out, I'd be more than happy to maintain this extension myself (incl.
-> providing builds), but since there may be breakages in the hypothetical merge into SourceMod
-> itself, builds are currently do-it-yourself so I know you're capable of handling any changes
-> that may happen in the future.
+> If you were a developer using this extension, you must recompile plugins to use the version
+> in SourceMod; there is no other migration path, and the extension cannot be used alongside
+> the implementation in SourceMod.
 
-[issue_1534]: https://github.com/alliedmodders/sourcemod/issues/1534
-[issue_1547]: https://github.com/alliedmodders/sourcemod/issues/1547
+[pr_1673]: https://github.com/alliedmodders/sourcemod/pull/1673
 
 A SourceMod extension that parses out the level entity string into a format that can be easily
 manipulated by plugins.
